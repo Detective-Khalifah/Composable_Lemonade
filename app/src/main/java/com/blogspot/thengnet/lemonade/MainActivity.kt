@@ -55,87 +55,46 @@ fun LemonadeApp(modifier: Modifier = Modifier) {
     var squeezes = 0
 
     when (currentStage) {
-        0 ->
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .wrapContentSize(Alignment.Center),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Button(onClick = {
-                    currentStage++
-                }) {
-                    Image(
-                        painter = painterResource(id = R.drawable.lemon_tree),
-                        contentDescription = stringResource(R.string.lemon_tree_content_description)
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = stringResource(id = R.string.lemon_tree),
-                    fontSize = 18.sp
-                )
+        0 -> CurrentStage(
+            modifier = modifier,
+            instruction = R.string.lemon_tree,
+            imageResId = R.drawable.lemon_tree,
+            contentDescription = R.string.lemon_tree_content_description,
+            onClickHandler = {
+                currentStage++
             }
+        )
 
-        1 -> Column(
-            modifier = modifier
-                .fillMaxSize()
-                .wrapContentSize(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(onClick = {
+        1 -> CurrentStage(
+            modifier = modifier,
+            instruction = R.string.lemon,
+            imageResId = R.drawable.lemon_squeeze,
+            contentDescription = R.string.lemon_content_description,
+            onClickHandler = {
                 squeezes++
                 if (squeezes == requiredSqueeze) currentStage++
-            }) {
-                Image(
-                    painter = painterResource(id = R.drawable.lemon_squeeze),
-                    contentDescription = stringResource(R.string.lemon_content_description)
-                )
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = stringResource(id = R.string.lemon),
-                fontSize = 18.sp
-            )
-        }
+        )
 
-        2 -> Column(
-            modifier = modifier
-                .fillMaxSize()
-                .wrapContentSize(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(onClick = { currentStage++ }) {
-                Image(
-                    painter = painterResource(id = R.drawable.lemon_drink),
-                    contentDescription = stringResource(R.string.lemonade_content_description)
-                )
+        2 -> CurrentStage(
+            modifier = modifier,
+            instruction = R.string.lemonade,
+            imageResId = R.drawable.lemon_drink,
+            contentDescription = R.string.lemonade_content_description,
+            onClickHandler = {
+                currentStage++
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = stringResource(id = R.string.lemonade),
-                fontSize = 18.sp
-            )
-        }
+        )
 
-        3 -> Column(
-            modifier = modifier
-                .fillMaxSize()
-                .wrapContentSize(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(onClick = { currentStage = 0 }) {
-                Image(
-                    painter = painterResource(id = R.drawable.lemon_restart),
-                    contentDescription = stringResource(R.string.empty_glass_content_description)
-                )
+        3 -> CurrentStage(
+            modifier = modifier,
+            instruction = R.string.empty_glass,
+            imageResId = R.drawable.lemon_restart,
+            contentDescription = R.string.empty_glass_content_description,
+            onClickHandler = {
+                currentStage = 0
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = stringResource(id = R.string.empty_glass),
-                fontSize = 18.sp
-            )
-        }
+        )
     }
 }
 
@@ -144,5 +103,33 @@ fun LemonadeApp(modifier: Modifier = Modifier) {
 fun LemonadePreview() {
     LemonadeTheme {
         LemonadeApp()
+    }
+}
+
+@Composable
+fun CurrentStage(
+    modifier: Modifier = Modifier,
+    instruction: Int,
+    imageResId: Int,
+    contentDescription: Int,
+    onClickHandler: () -> Unit
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.Center),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(onClick = onClickHandler) {
+            Image(
+                painter = painterResource(id = imageResId),
+                contentDescription = stringResource(contentDescription)
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = stringResource(id = instruction),
+            fontSize = 18.sp
+        )
     }
 }
