@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.blogspot.thengnet.lemonade.ui.theme.LemonadeTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -47,23 +48,94 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun LemonadeApp(modifier: Modifier = Modifier) {
 
-    var contentDescription = R.string.lemon_tree_content_description
-    var instruction = R.string.lemon_tree
-    var imageResource = R.drawable.lemon_tree
+    var currentStage by remember {
+        mutableStateOf(0)
+    }
+    val requiredSqueeze = (2..4).random()
+    var squeezes = 0
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Button(onClick = { /*TODO*/ }) {
-            Image(painter = painterResource(id = imageResource), contentDescription = stringResource(contentDescription))
+    when (currentStage) {
+        0 ->
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .wrapContentSize(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Button(onClick = {
+                    currentStage++
+                }) {
+                    Image(
+                        painter = painterResource(id = R.drawable.lemon_tree),
+                        contentDescription = stringResource(R.string.lemon_tree_content_description)
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = stringResource(id = R.string.lemon_tree),
+                    fontSize = 18.sp
+                )
+            }
+
+        1 -> Column(
+            modifier = modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(onClick = {
+                squeezes++
+                if (squeezes == requiredSqueeze) currentStage++
+            }) {
+                Image(
+                    painter = painterResource(id = R.drawable.lemon_squeeze),
+                    contentDescription = stringResource(R.string.lemon_content_description)
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = stringResource(id = R.string.lemon),
+                fontSize = 18.sp
+            )
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = stringResource(id = instruction),
-            fontSize = 18.sp
-        )
+
+        2 -> Column(
+            modifier = modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(onClick = { currentStage++ }) {
+                Image(
+                    painter = painterResource(id = R.drawable.lemon_drink),
+                    contentDescription = stringResource(R.string.lemonade_content_description)
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = stringResource(id = R.string.lemonade),
+                fontSize = 18.sp
+            )
+        }
+
+        3 -> Column(
+            modifier = modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(onClick = { currentStage = 0 }) {
+                Image(
+                    painter = painterResource(id = R.drawable.lemon_restart),
+                    contentDescription = stringResource(R.string.empty_glass_content_description)
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = stringResource(id = R.string.empty_glass),
+                fontSize = 18.sp
+            )
+        }
     }
 }
 
